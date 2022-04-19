@@ -3,6 +3,7 @@ const github = require('@actions/github');
 const { graphql } = require('@octokit/graphql');
 const isBefore = require('date-fns/isBefore');
 const sub = require('date-fns/sub');
+const util = require('util');
 
 const fetchCardsQuery = `query projectCards($owner: String!, $repo: String!, $projectName: String!, $cursor: String!) {
                            repository(owner: $owner, name: $repo) {
@@ -86,7 +87,9 @@ async function fetchCardInfo(
         currentCursor,
         accessToken
       );
-      console.log(projectCards);
+      console.log(
+        util.inspect(projectCards, { showHidden: false, depth: null })
+      );
       projectCards =
         projectCards.repository.projects.edges[0].node.columns.edges.find(
           (edge) =>
